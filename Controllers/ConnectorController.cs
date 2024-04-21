@@ -21,6 +21,10 @@ namespace SmartCharging.Controllers
             _chargeStationService = chargeStation;
         }
 
+        /// <summary>
+        /// Get connector by ID.
+        /// </summary>
+        /// <param name="id">Connector ID.</param>
         [HttpGet("get-connector/{id:length(24)}")]
         public async Task<IActionResult> Get(string id)
         {
@@ -36,6 +40,11 @@ namespace SmartCharging.Controllers
 
         }
 
+        /// <summary>
+        /// Create a new connector.
+        /// The control that a maximum of 5 connectors can be added to a station is done here. 
+        /// </summary>
+        /// <param name="connector">Connector object to create.</param>
         [HttpPost("create-connector")]
         public async Task<IActionResult> Create(Connector connector)
         {
@@ -62,6 +71,12 @@ namespace SmartCharging.Controllers
             }
         }
 
+        /// <summary>
+        /// Update a connector by ID.
+        /// When a connector is updated, the corresponding information is updated in the Connector table and in the Connectors field in the ChargeStations table.
+        /// </summary>
+        /// <param name="connector">Updated connector object.</param>
+        /// <param name="id">Connector ID.</param>
         [HttpPut("update-connector/{id:length(24)}")]
         public async Task<IActionResult> Update(Connector connector, string id)
         {
@@ -89,7 +104,10 @@ namespace SmartCharging.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Delete a connector by ID.
+        /// </summary>
+        /// <param name="id">Connector ID.</param>
         [HttpDelete("delete-connector/{id:length(24)}")]
         public async Task<IActionResult> Delete(string id)
         {

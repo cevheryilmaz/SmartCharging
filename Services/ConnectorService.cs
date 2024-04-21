@@ -18,6 +18,11 @@ namespace SmartCharging.Services
             _connectors = context.Connectors;
         }
 
+        /// <summary>
+        /// Get a connector by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the connector to retrieve.</param>
+        /// <returns>The connector with the specified ID.</returns>
         public async Task<Connector> GetConnectorById(string id)
         {
             try
@@ -30,6 +35,11 @@ namespace SmartCharging.Services
             }
         }
 
+        /// <summary>
+        /// Create a new connector.
+        /// </summary>
+        /// <param name="connector">The connector object to create.</param>
+        /// <returns>A tuple containing the newly created connector and a success message.</returns>
         public async Task<(Connector,string)> CreateConnector(Connector connector)
         {
             try
@@ -43,6 +53,14 @@ namespace SmartCharging.Services
             }
         }
 
+        /// <summary>
+        /// Update an existing connector.
+        /// The ampere utilization status of the connectors in the charging station is controlled to be less than or equal to the CapacityInAmps parameter.
+        /// If the capacity utilization request is more than CapacityInAmps, the request is rejected. 
+        /// </summary>
+        /// <param name="connector">The updated connector object.</param>
+        /// <param name="id">The ID of the connector to update.</param>
+        /// <returns>A containing a message indicating the result of the update operation and a boolean indicating whether the operation was successful or not.</returns>
         public async Task<(string, bool)> UpdateConnector(Connector connector, string id)
         {
             try
@@ -80,6 +98,11 @@ namespace SmartCharging.Services
             }
         }
 
+        /// <summary>
+        /// Delete a connector by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the connector to delete.</param>
+        /// <returns>A success message indicating the deletion operation was successful.</returns>
         public async Task<string> DeleteConnector(string id)
         {
             try

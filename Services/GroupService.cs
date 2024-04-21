@@ -11,6 +11,9 @@ namespace SmartCharging.Services
 
     public class GroupService
     {
+        /// <summary>
+        /// The collections used in the service from Mongodb are read here.
+        /// </summary>
         private readonly IMongoCollection<Group> _groups;
         private readonly IMongoCollection<ChargeStation> _chargeStations;
         private readonly IMongoCollection<Connector> _connectors;
@@ -22,6 +25,11 @@ namespace SmartCharging.Services
             _connectors = context.Connectors;
         }
 
+        /// <summary>
+        /// Get a group by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the group to retrieve.</param>
+        /// <returns>The group with the specified ID.</returns>
         public async Task<Group> GetGroupById(string id)
         {
             try
@@ -34,6 +42,11 @@ namespace SmartCharging.Services
             }
         }
 
+        /// <summary>
+        /// Create a new group.
+        /// </summary>
+        /// <param name="group">The group object to create.</param>
+        /// <returns>A tuple containing the newly created group and a success message.</returns>
         public async Task<(Group,string)> CreateGroup(Group group)
         {
             try
@@ -47,6 +60,12 @@ namespace SmartCharging.Services
             }
         }
 
+        /// <summary>
+        /// Update an existing group.
+        /// </summary>
+        /// <param name="group">The updated group object.</param>
+        /// <param name="id">The ID of the group to update.</param>
+        /// <returns>A success message indicating the update operation was successful.</returns>
         public async Task<string> UpdateGroup(Group group, string id)
         {
             try
@@ -60,6 +79,11 @@ namespace SmartCharging.Services
             }
         }
 
+        /// <summary>
+        /// Delete a group by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the group to delete.</param>
+        /// <returns>A success message indicating the deletion operation was successful.</returns>
         public async Task<string> DeleteGroup(string id)
         {
             try
@@ -74,6 +98,12 @@ namespace SmartCharging.Services
             }
         }
 
+        /// <summary>
+        /// Delete all charge stations associated with a group by group ID.
+        /// When the charging station is to be deleted, the control for deleting the connectors connected to it is done here. 
+        /// </summary>
+        /// <param name="id">The ID of the group whose charge stations should be deleted.</param>
+        /// <returns>A success message indicating the deletion operation was successful.</returns>
         public async Task<string> DeleteStationsByGroupId(string id)
         {
             try
@@ -97,6 +127,11 @@ namespace SmartCharging.Services
             }
         }
 
+        /// <summary>
+        /// Check if a charge station exists within any group.
+        /// </summary>
+        /// <param name="id">The ID of the charge station to check.</param>
+        /// <returns>True if the charge station exists within any group; otherwise, false.</returns>
         public async Task<bool> CheckChargeStation(string id)
         {
             try

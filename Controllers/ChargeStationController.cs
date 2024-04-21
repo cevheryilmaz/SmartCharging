@@ -22,6 +22,10 @@ namespace SmartCharging.Controllers
             _groupService = groupService;
         }
 
+        /// <summary>
+        /// Get charge station by ID.
+        /// </summary>
+        /// <param name="id">Charge station ID.</param>
         [HttpGet("get-station/{id:length(24)}")]
         public async Task<IActionResult> Get(string id)
         {
@@ -37,6 +41,12 @@ namespace SmartCharging.Controllers
 
         }
 
+        /// <summary>
+        /// Create a new charge station.
+        /// When a charging station is added, the groupId information about it is also saved in the db.
+        /// The id information of the created charging station is transferred to the IdsofChargeStations array in the Group table.
+        /// </summary>
+        /// <param name="chargeStation">Charge station object to create.</param>
         [HttpPost("create-station")]
         public async Task<IActionResult> Create(ChargeStation chargeStation)
         {
@@ -62,6 +72,11 @@ namespace SmartCharging.Controllers
             }
         }
 
+        /// <summary>
+        /// Update a charge station by ID.
+        /// </summary>
+        /// <param name="chargeStation">Updated charge station object.</param>
+        /// <param name="id">Charge station ID.</param>
         [HttpPut("update-station/{id:length(24)}")]
         public async Task<IActionResult> Update(ChargeStation chargeStation, string id)
         {
@@ -76,7 +91,11 @@ namespace SmartCharging.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Delete a charge station by ID.
+        /// If a charging station is deleted, all connectors connected to it are deleted. 
+        /// </summary>
+        /// <param name="id">Charge station ID.</param>
         [HttpDelete("delete-station/{id:length(24)}")]
         public async Task<IActionResult> Delete(string id)
         {

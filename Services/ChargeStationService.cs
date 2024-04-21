@@ -20,6 +20,11 @@ namespace SmartCharging.Services
             _connectors = context.Connectors;
         }
 
+        /// <summary>
+        /// Get a charging station by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the charging station to retrieve.</param>
+        /// <returns>The charging station with the specified ID.</returns>
         public async Task<ChargeStation> GetStationById(string id)
         {
             try
@@ -32,6 +37,11 @@ namespace SmartCharging.Services
             }
         }
 
+        /// <summary>
+        /// Create a new charging station.
+        /// </summary>
+        /// <param name="station">The charging station object to create.</param>
+        /// <returns>A tuple containing the newly created charging station and a success message.</returns>
         public async Task<(ChargeStation, string)> CreateStation(ChargeStation station)
         {
             try
@@ -45,6 +55,12 @@ namespace SmartCharging.Services
             }
         }
 
+        /// <summary>
+        /// Update an existing charging station.
+        /// </summary>
+        /// <param name="station">The updated charging station object.</param>
+        /// <param name="id">The ID of the charging station to update.</param>
+        /// <returns>A success message indicating the update operation was successful.</returns>
         public async Task<string> UpdateStation(ChargeStation station, string id)
         {
             try
@@ -58,6 +74,11 @@ namespace SmartCharging.Services
             }
         }
 
+        /// <summary>
+        /// Delete a charging station by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the charging station to delete.</param>
+        /// <returns>A success message indicating the deletion operation was successful.</returns>
         public async Task<string> DeleteStation(string id)
         {
             try
@@ -72,6 +93,11 @@ namespace SmartCharging.Services
             }
         }
 
+        /// <summary>
+        /// Delete all connectors associated with a charging station by station ID.
+        /// </summary>
+        /// <param name="id">The ID of the charging station whose connectors should be deleted.</param>
+        /// <returns>A success message indicating the deletion operation was successful.</returns>
         public async Task<string> DeleteConnectorsByStationId(string id)
         {
             try
