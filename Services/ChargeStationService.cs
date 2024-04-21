@@ -1,7 +1,11 @@
-﻿using MongoDB.Driver;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using MongoDB.Driver;
 using SmartCharging.Configuration;
 using SmartCharging.Models;
+using System;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SmartCharging.Services
 {
@@ -18,35 +22,68 @@ namespace SmartCharging.Services
 
         public async Task<ChargeStation> GetStationById(string id)
         {
-            return await _chargeStation.Find(station => station.Id == id).FirstOrDefaultAsync();
+            try
+            {
+                return await _chargeStation.Find(station => station.Id == id).FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public async Task<ChargeStation> CreateStation(ChargeStation station)
+        public async Task<(ChargeStation, string)> CreateStation(ChargeStation station)
         {
-            await _chargeStation.InsertOneAsync(station);
-            return station;
+            try
+            {
+                await _chargeStation.InsertOneAsync(station);
+                return (station, "Charging Station was created.");
+                }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public async Task<ChargeStation> UpdateStation(ChargeStation station, string id)
+        public async Task<string> UpdateStation(ChargeStation station, string id)
         {
-            await _chargeStation.ReplaceOneAsync(c => c.Id == id, station);
-            return station;
+            try
+            {
+                await _chargeStation.ReplaceOneAsync(c => c.Id == id, station);
+                return "Charge Station Updated";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<string> DeleteStation(string id)
         {
-            var filter = Builders<ChargeStation>.Filter.Eq("Id", id);
-
-            await _chargeStation.DeleteOneAsync(filter);
-            return id;
+            try
+            {
+                var filter = Builders<ChargeStation>.Filter.Eq("Id", id);
+                await _chargeStation.DeleteOneAsync(filter);
+                return "Charge Station Deleted";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public async Task<string> DeleteConnectorsByGroupId(string id)
+        public async Task<string> DeleteConnectorsByStationId(string id)
         {
-            var filter = Builders<Connector>.Filter.Eq("ConnectedStationId", id);
-
-            await _connectors.DeleteManyAsync(filter);
-            return id;
+            try
+            {
+                var filter = Builders<Connector>.Filter.Eq("ConnectedStationId", id);
+                await _connectors.DeleteManyAsync(filter);
+                return "Connector Deleted By Station Id";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

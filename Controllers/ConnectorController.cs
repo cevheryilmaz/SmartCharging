@@ -39,11 +39,20 @@ namespace SmartCharging.Controllers
         {
             try
             {
-                Connector newConnector = await _connectorService.CreateConnector(connector);
                 ChargeStation stationData = await _chargeStationService.GetStationById(connector.ConnectedStationId);
-                stationData.Connectors.Add(newConnector);
-                await _chargeStationService.UpdateStation(stationData, stationData.Id);
-                return Ok(new { success = true, message = "Connector was added and the necessary update was made to the charging station." });
+                if (stationData.Connectors.Count < 5)
+                {
+                    (Connector newConnector, string serviceMessage) = await _connectorService.CreateConnector(connector);
+                    stationData.Connectors.Add(newConnector);
+                    await _chargeStationService.UpdateStation(stationData, stationData.Id);
+                    return Ok(new { data = newConnector, success = true, message = serviceMessage });
+                }
+                else
+                {
+                    return Ok(new {  success = false, message = "Request rejected! The charging station has a maximum limit of connectors. That's why adding a connector could not be done." });
+                }
+               
+            
             }
             catch (Exception ex)
             {
@@ -56,8 +65,8 @@ namespace SmartCharging.Controllers
         {
             try
             {
-                await _connectorService.UpdateConnector(connector, id);
-                return Ok(new { success = true, message = "Connector Updated" });
+                (string serviceMessage, bool serviceStatus) = await _connectorService.UpdateConnector(connector, id);
+                return Ok(new {success = serviceStatus, message = serviceMessage });
             }
             catch (Exception ex)
             {
@@ -71,8 +80,8 @@ namespace SmartCharging.Controllers
         {
             try
             {
-                await _connectorService.DeleteConnector(id);
-                return Ok(new { success = true, message = "Connector Deleted" });
+               string serviceMessage = await _connectorService.DeleteConnector(id);
+                return Ok(new { success = true, message = serviceMessage });
 
             }
             catch (Exception ex)
@@ -82,5 +91,6 @@ namespace SmartCharging.Controllers
 
 
         }
+
     }
 }

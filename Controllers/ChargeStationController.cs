@@ -42,7 +42,7 @@ namespace SmartCharging.Controllers
         {
             try
             {
-                ChargeStation newStation = await _chargeStationService.CreateStation(chargeStation);
+                (ChargeStation newStation, string serviceMessage) = await _chargeStationService.CreateStation(chargeStation);
                 bool statusOfStation = await _groupService.CheckChargeStation(newStation.Id);
                 if (!statusOfStation)
                 {
@@ -53,7 +53,7 @@ namespace SmartCharging.Controllers
                     await _groupService.UpdateGroup(group, group.Id);
                     
                 }
-                return Ok(new { success = true, message = "Charging Station was created and data was checked and saved to the group it is linked to." });
+                return Ok(new { data= newStation, success = true, message = serviceMessage });
 
             }
             catch (Exception ex)
@@ -67,8 +67,8 @@ namespace SmartCharging.Controllers
         {
             try
             {
-                await _chargeStationService.UpdateStation(chargeStation, id);
-                return Ok(new { success = true, message = "Charge Station Updated" });
+                string serviceMessage = await _chargeStationService.UpdateStation(chargeStation, id);
+                return Ok(new { success = true, message = serviceMessage });
             }
             catch (Exception ex)
             {
@@ -81,11 +81,11 @@ namespace SmartCharging.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             try
-            {   
+            {
                 //delete all included connectors and charge stations according to id.
-                await _chargeStationService.DeleteStation(id);
-                await _chargeStationService.DeleteConnectorsByGroupId(id);
-                return Ok(new { success = true, message = "Charge Station Deleted" });
+                string serviceMessage = await _chargeStationService.DeleteStation(id);
+                await _chargeStationService.DeleteConnectorsByStationId(id);
+                return Ok(new { success = true, message = serviceMessage  });
 
             }
             catch (Exception ex)

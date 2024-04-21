@@ -39,8 +39,8 @@ namespace SmartCharging.Controllers
         {
             try
             {
-                await _groupService.CreateGroup(group);
-                return Ok(new { success = true, message = "Group created" });
+                (Group newGroup,string serviceMessage) = await _groupService.CreateGroup(group);
+                return Ok(new { data = newGroup, success = true, message = serviceMessage });
             }
             catch (Exception ex)
             {
@@ -53,8 +53,8 @@ namespace SmartCharging.Controllers
         {
             try
             {
-                await _groupService.UpdateGroup(group,id);
-                return Ok(new { success = true, message = "Group Updated" });
+                string serviceMessage = await _groupService.UpdateGroup(group,id);
+                return Ok(new { success = true, message = serviceMessage });
             }
             catch (Exception ex)
             {
@@ -69,9 +69,10 @@ namespace SmartCharging.Controllers
             try
             {
                 //delete all included charge station and group according to id.
-                await _groupService.DeleteGroup(id);
                 await _groupService.DeleteStationsByGroupId(id);
-                return Ok(new { success = true, message = "Group and associated charging stations have been deleted." });
+                string serviceMessage =  await _groupService.DeleteGroup(id);
+               
+                return Ok(new { success = true, message = serviceMessage });
 
             }
             catch (Exception ex)
