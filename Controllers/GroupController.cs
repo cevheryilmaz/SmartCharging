@@ -39,8 +39,16 @@ namespace SmartCharging.Controllers
         {
             try
             {
-                (Group newGroup,string serviceMessage) = await _groupService.CreateGroup(group);
-                return Ok(new { data = newGroup, success = true, message = serviceMessage });
+                if (group.CapacityInAmps >= 0) 
+                {
+                    (Group newGroup, string serviceMessage) = await _groupService.CreateGroup(group);
+                    return Ok(new { data = newGroup, success = true, message = serviceMessage });
+                }
+                else
+                {
+                    return Ok(new { success = false, message = "Request Rejected! The capacity in amperes cannot be less than 0." });
+                }
+                
             }
             catch (Exception ex)
             {

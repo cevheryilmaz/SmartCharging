@@ -3,6 +3,8 @@ using SmartCharging.Services;
 using System.Threading.Tasks;
 using System;
 using SmartCharging.Models;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace SmartCharging.Controllers
 {
@@ -66,6 +68,19 @@ namespace SmartCharging.Controllers
             try
             {
                 (string serviceMessage, bool serviceStatus) = await _connectorService.UpdateConnector(connector, id);
+                ChargeStation stationData = await _chargeStationService.GetStationById(connector.ConnectedStationId);
+                int indexOfConnector = 0;
+                foreach (var conn in stationData.Connectors)
+                {
+                    if(conn.Id == id) 
+                    { 
+                        indexOfConnector = stationData.Connectors.IndexOf(conn);
+                        break;
+                    }
+                }
+                stationData.Connectors[indexOfConnector] = connector;
+                await _chargeStationService.UpdateStation(stationData, stationData.Id);
+
                 return Ok(new {success = serviceStatus, message = serviceMessage });
             }
             catch (Exception ex)
