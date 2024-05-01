@@ -64,9 +64,6 @@ Postman Api tests were also used during project development. The related collect
 In the link below, details about importing json file to collection are shared. 
 - https://docs.tink.com/entries/articles/postman-collection-for-account-check
 
- <h5 align="start">
-I look forward to sharing details about the project and talking to you about the business opportunity.
-</h5>
 
 
 
